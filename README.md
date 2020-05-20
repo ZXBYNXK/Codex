@@ -6,7 +6,7 @@
 
 1. Rebuilding the API
    Dependencies.
-    ````json
+    ```json
     "dependencies": {
     "bcrypt": "^4.0.1",
     "config": "^3.3.1",
@@ -24,7 +24,7 @@
     ``
     Confiuguring server.js
     
-    ```javascript
+```javascript
     // Import express
     const express = require("express");
 
@@ -39,4 +39,5 @@
 
     // Set the server to listen on PORT & execute a callback function.
     server.listen(PORT, () => { console.log(`Listening on port ${PORT}...`) })
-    ``
+    
+``
