@@ -21,8 +21,10 @@
     "concurrently": "^5.2.0",
     "nodemon": "^2.0.4"
    }
+   ``
     [x] Confiugure server.js
-    ```javascript
+    
+```javascript
     // Import express
     const express = require("express");
 
@@ -39,4 +41,4 @@
 
     // Set the server to listen on PORT & execute a callback function.
     server.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
-    ``
+``
