@@ -2,27 +2,28 @@
 
 // Whats new ?
 // Adding React Redux and upgrade my hackr application.
+// Starting from scratch again as a good refresher 🔃.
 
-1. Building the API
-   a. Installation and setup.
-   ```json
-   "dependencies": {
-    "bcrypt": "^4.0.1",
-    "config": "^3.3.1",
-    "express": "^4.17.1",
-    "express-validator": "^6.5.0",
-    "gravatar": "^1.8.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.15",
-    "request": "^2.88.2"
-   },
-   "devDependencies": {
-    "concurrently": "^5.2.0",
-    "nodemon": "^2.0.4"
-   }
-   ``
-   
-    b. Confiugure server.js
+1. Rebuilding the API
+   Dependencies.
+````json
+"dependencies": {
+"bcrypt": "^4.0.1",
+"config": "^3.3.1",
+"express": "^4.17.1",
+"express-validator": "^6.5.0",
+"gravatar": "^1.8.0",
+"jsonwebtoken": "^8.5.1",
+"mongoose": "^5.9.15",
+"request": "^2.88.2"
+},
+"devDependencies": {
+"concurrently": "^5.2.0",
+"nodemon": "^2.0.4"
+}
+``
+
+    Confiuguring server.js
 
 ```javascript
 // Import express
@@ -42,4 +43,4 @@ server.get("/", (req, res) => {
 // Set the server to listen on PORT & execute a callback function.
 server.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
 ``;
-```
+````
