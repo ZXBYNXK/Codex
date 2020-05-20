@@ -24,11 +24,11 @@
         }
 ```
 
-//   Confiuguring server.js    
+//   Creating and testing server.js    
 
 ````javascript
         //  server.js
-        
+
         // Import express
         const express = require("express");
 
