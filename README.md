@@ -1,9 +1,10 @@
 # Hackr 2.0
 
-// Whats new ?
+// Whats new?
+<br>
 // Adding React Redux and upgrade my hackr application.
 // Starting from scratch again as a good refresher 🔃.
-
+<br>
 // 1. Rebuilding the API
 
 //     Dependencies.   
