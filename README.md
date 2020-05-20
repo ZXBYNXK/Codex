@@ -3,7 +3,8 @@
 // Whats new?
 <br>
 // Adding React Redux and upgrade my hackr application.
-// Starting from scratch again as a good refresher 🔃.
+<br>
+// Starting from scratch for a good refresher 🔃.
 <br>
 // 1. Rebuilding the API
 
