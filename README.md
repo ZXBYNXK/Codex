@@ -1,14 +1,13 @@
-# Hackr 2.0
+# 1) Basic set up of express.
 
-// Whats new?
-<br>
-// Adding React Redux and upgrade my hackr application.
-<br>
-// Starting from scratch for a good refresher 🔃.
-<br>
-// 1. Rebuilding the API
+// Install Dependencies
+// Create ./server.js file
+// Add a simple get request to the root route to start it off.
 
-//     Dependencies.   
+
+// Files changed or created
+
+// package.json (Changed)
  ```javascript
         "dependencies": {
         "bcrypt": "^4.0.1",
@@ -26,8 +25,7 @@
         }
 ```
 
-//   Creating and testing server.js    
-
+// server.js  (Created)
 ````javascript
         //  server.js
 
