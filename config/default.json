@@ -1,3 +1,4 @@
 {
-    "mongoUri": "mongodb+srv://rain_admin:75WGfUG6JfEm81hS@cdevs-cluster-1-xhcxn.mongodb.net/CODE-X?retryWrites=true"
+    "mongoUri": "mongodb+srv://rain_admin:75WGfUG6JfEm81hS@cdevs-cluster-1-xhcxn.mongodb.net/CODE-X?retryWrites=true",
+    "jwtSecret":"F4A38641FEA4ED9967A1C567DCF48B18271B5F66210F845CF510A3AC31A54C4E"
 }

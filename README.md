@@ -1,85 +1,87 @@
-# 6 ) Registering user to the database.
+# 7 ) Assigning a jsonwebtoken to the header.
 
 ## Step by step summary.
 
-// 1: See if user exists <br>
-// 2: Get users gravatar <br>
-// 3: Encrypt password <br>
-// 4: Save the user to database <br>
+// 1: Create the secret string used to sign each token. <br>
+// 2: Import config & jsonwebtoken into ./routes/api/users.js <br>
+// 3: <br>
+//   Create a variable and assign it an object containing the database id of the user, 
+//   which will represent the payload given to the jwt.sign() method later on. <br>
+// 4: <br>
+//   Use the 'sign()' method with the defined payload & secret to sign a token then execute a callback <br>
+//   to handle errors or send the token back as the response. <br>
 &nbsp;
 
 ## Files to create, change or delete.
 
+// Change: ./config/default.json
+
+```javascript
+// CONFIG: default.json
+
+// 1: Create the secret string which can be any arbitrary value like a password.
+{
+    "mongoUri": "mongodb+srv://<USER-NAME>:********@<CLUSTER>/<APP-NAME>?retryWrites=true"
+    "jwtSecret": "****************************************"
+}
+```
+
+&nbsp;
+
 // Change: ./routes/api/users.js
 
 ```javascript
-// Changes -> Import User model
-const User = require("../../models/User");
+// ROUTE: users.js
 
-// Changes -> import gravatar, bcryptjs
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
+// 2:
+// import config to obtain the secret string used to sign the tokens.
+const config = require("config");
+
+// import npm jsonwebtoken package to use the methods it contains.
+const jwt = require("jsonwebtoken");
 
 // file...
 
-async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  // Deconstruct from req.body
-  const { email, password, name } = req.body;
+// JsonWebToken = header.payload.signature encrypted to a-9.a-9.a-9
+/* 
+  Example: 
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. (Header - Default: {'alg': HS256, typ:'JWT'}) 
+  eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ. (Payload)
+  SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c (Signature)
+  */
 
-  try {
-    // 1: See if the user exists
+// Note: The 'user' variable now allready saved to the database has its id.
+// see ./routes/users.js or previous section about how that all takes place.
 
-    // Check user collection for an email matching the deconstructed 'email' value.
-    let user = await User.findOne({ email });
-
-    // if the above value has anything in it then true so email allreadt exists.
-    if (user)
-      res.status(401).json({ erros: { message: "Email allready exists." } });
-
-    // Logic will continue scince the above not sent as a response.
-
-    // 2: Get users gravatar
-    //
-    const avatar = gravatar.url(email, {
-      // s: = size
-      s: "200",
-      // r: = rating
-      r: "pg",
-      // d: = default
-      d: "mm",
-    });
-
-    // Since the variable 'user' is still empty lets assign it a value of a new user schema.
-    user = new User({
-      name,
-      email,
-      avatar,
-      password,
-    });
-
-    // 3: Encrypt password with bcryptjs
-    // Salting is just a random string to attach to a hashed password becuase
-    // it prevents attackers from figuring out typical hashed patterns from common words.
-    const salt = await bcrypt.genSalt(10);
-
-    // This is all that is required for hashing the password verifying is also a similar process.
-    user.password = await bcrypt.hash(password, salt);
-
-    // Now save the new user to the database.
-
-    // 4: Save user to database.
-    await user.save();
-
-    res.send(201).send(`New user: ${name} has registered!`);
-  } catch (err) {
-    console.error(err.message);
-    res.send(400).json({ error: { message: err.message } });
-  }
+// 3: 
+//  Creating the payload object to obtain the users mongoose id.
+const payload = {
+  user: {
+    id: user.id,
+  },
 };
+
+// 4:
+//  Sign the token the payload secret, set expiration and create a callback after signing.
+//  jwt.sign(<PAYLOAD>, <JWT-SECRET>, <OPTIONS>, <CALLBACK> )
+jwt.sign(
+  // The payload above
+  payload,
+  // Imported secret string
+  config.get("jwtSecret"),
+  // Set to expire in a day normally an hour which is 3600
+  { expiresIn: 360000 },
+
+  // Callback fuction to handle an error or return the token as the response
+  (err, token) => {
+    if (err) throw err;
+    res.json({ token });
+  }
+);
+
+// NOTE: 
+//  After this you can create a middleware that uses the jwt.verify() method to verify tokens
+//  in order to protect private endpoints. Will cover in next section.
 
 // ...file
 ```
