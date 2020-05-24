@@ -1,4 +1,4 @@
-# 7 ) Assigning a jsonwebtoken to the header.
+# 7 ) Assign json web token after registration.
 
 ## Step by step summary.
 
