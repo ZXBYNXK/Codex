@@ -1,4 +1,4 @@
-// db.js (New)
+// db.js 
 
 // Import mongoose & config.
 const mongoose = require('mongoose');
