@@ -2,9 +2,16 @@
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const express = require("express");
-const router = express.Router();
+const gravatar = require("gravatar");
 const { check, validationResult } = require("express-validator");
+
+// 2: import config and jwt
+const jwt = require("jsonwebtoken");
+const config = require("config");
+
 const User = require("../../models/User");
+
+const router = express.Router();
 
 // @route     POST 'api/users'
 // @desc      Registers new users
@@ -52,7 +59,33 @@ router.post(
 
       await user.save();
 
-      res.status(201).send(`New user: ${name} has registered!`);
+      // 3: 
+      //  Create a variable and assign it an object representing the payload.
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      // 4: 
+      //  Sign the token the payload secret, set expiration and create a callback after signing. 
+      //  jwt.sign(<PAYLOAD>, <JWT-SECRET>, <OPTIONS>, <CALLBACK> )
+      jwt.sign(
+        // The payload above
+        payload,
+        // Imported secret string
+        config.get("jwtSecret"),
+        // Set to expire in a day normally an hour which is 3600
+        { expiresIn: 360000 },
+
+        // Callback fuction to handle an error or return the token as the response
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+
+      
     } catch (err) {
       console.error(err.message);
 
