@@ -6,7 +6,6 @@ const PORT = process.env.PORT || "5000";
 
 connectDatabse();
 
-// 2: Add express's built-in body parser as middleware. 
 server.use(express.json());
 
 server.get("/", (req, res) => {
