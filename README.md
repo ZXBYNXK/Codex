@@ -1,4 +1,4 @@
-# 6 ) Registering user to the database.
+# 6 ) Registering users to the database.
 
 ## Step by step summary.
 
