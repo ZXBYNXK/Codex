@@ -1,6 +1,4 @@
   // ROUTE: auth.js 
-  
-  //2: For all files
   const express = require('express');
   const router = express.Router();
 
