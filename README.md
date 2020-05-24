@@ -1,50 +1,73 @@
-# 4 ) API initial setup.
+# 5 ) User registration validation.
 
 ## Step by step summary.
-// 1: Create ./routes/api/ -> users.js, auth.js, profile.js & posts.js <br>
-// 2: Create a test route for all files. <br>
-// 3: Import all the routes to ./server.js file & use as middleware with a defined endpoint <br>
+
+// 1: Change ./routes/api/users.js from a test route to a post route to register new users. <br>
+// 2: Change ./server.js by adding body parser middleware to parse incoming requests. <br>
+// 3: Change ./routes/api/users.js add a second parameter to implement express validator.<br>
 &nbsp;
 
 ## Files to create, change or delete.
-// Create: ./routes/api/ -> users.js, auth.js, profile.js & posts.js <br>
-//    1: mkdir routes routes/api && cd routes/api/ && touch users.js auth.js profile.js posts.js <br>
-&nbsp; 
 
-// Change: ./routes/api users.js auth.js profile.js posts.js
+// Change ./server.js
+
 ```javascript
-//    NOTE: For all files include the following but change the test message
+// ./server.js
 
-//    Inital setup of any mongoose route other than the root of the app.
-  const express = require('express');
-  const router = express.Router();
+// file...
 
-//    2: Test route
-  router.get('/', (req, res) => res.status(200).send('<TEST-MESSAGE>'))
+// Changes:
+server.use(express.json());
 
-//    Export 
-  module.exports = router;
+// ...file
 ```
 
-// Change: ./server.js
+// Change: ./routes/api/users
+
 ```javascript
-// server.js
+// ./routes/api/users.js
 
-// Added the following code
-// 3: Import routes and then use them as middleware.
-// Endpoint: '/api/auth', Route Handler: './routes/api/auth.js'
-server.use("/api/auth", require("./routes/api/auth"));
+// file...
 
-// Endpoint: '/api/posts'
-// Route Handler: './routes/api/posts.js'
-server.use("/api/posts", require("./routes/api/posts"));
+// Changes:
+// 3: deconstruct the following from express-validatior
+const { check, validationResult } = require("express-validator");
 
-// Endpoint: '/api/profile'
-// Route Handler: './routes/api/profile.js'
-server.use("/api/profile", require("./routes/api/profile"));
+// 1: Change test route to POST route to parse incoming requests
+// @route     POST 'api/users'
+// @desc      Registers new users
+// @access    Public
 
-// Endpoint: '/api/users'
-// Route Handler: './routes/api/users.js'
-server.use("/api/users", require("./routes/api/users"));
+router.post(
+  "/",
+  // 3:
+  //    As a second argument in this route.
+  //    Add an array of check methods to validate the fields
+  //    based from the User model see ./models/User.js
+  [
+    check("name", "Name is required").not().isEmpty(),
+    check("email", "Please include valid email").isEmail(),
+    check("password", "Please enter 6 or more charachters.").isLength({
+      min: 6,
+    }),
+  ],
 
+  (req, res) => {
+    // 3:
+    //  'validationResult' returns an object when 'req' is passed to 'validationResult' which uses
+    // the check methods above sort of like a switch statement and evaluates all its keys & values.
+    const errors = validationResult(req);
+
+    // if errors is not empty
+    if (!errors.isEmpty()) {
+      // Send back a bad request with a json object containing the messages from above.
+      return res.status(400).json({ errors: errors.array() });
+      // NOTE: WIll come in handy with react.
+    }
+
+    res.send("Logged post");
+  }
+);
+
+// ...file
 ```
