@@ -1,87 +1,84 @@
-# 7 ) Assign json web token after registration.
+# 8 ) JWT Authentication Middleware.
 
 ## Step by step summary.
 
-// 1: Create the secret string used to sign each token. <br>
-// 2: Import config & jsonwebtoken into ./routes/api/users.js <br>
-// 3: <br>
-//   Create a variable and assign it an object containing the database id of the user, 
-//   which will represent the payload given to the jwt.sign() method later on. <br>
-// 4: <br>
-//   Use the 'sign()' method with the defined payload & secret to sign a token then execute a callback <br>
-//   to handle errors or send the token back as the response. <br>
+// 1: <br> 
+//  Create ./middleware/auth.js <br>
+&nbsp;
+
+// 2: <br>
+//  Import jsonwebtoken for the use of the verify() method & config for the 'jwtSecret'. <br> 
+&nbsp;
+
+// 2: <br> 
+//  Export a start of an anonymous function that will take req, res and next as arguments. <br> 
+&nbsp;
+
+// 3: <br> 
+//  Assign a variable the the value of the json web token by accessing the 'x-auth-token' <br>
+//  from the header of the request, 'req.header'. <br>
+&nbsp;
+
+// 4: <br> 
+//  Check if there even is a token if not then return a status of 403 and a message. <br> 
+&nbsp;
+
+// 5: <br> 
+//  Scince there is a token use the verify() method from npm 'jsonwebtoken' to <br> 
+//  authenticate & decode the token provided from '3:' and use the 'jwtSecret' that signed <br>
+//  the token to begin with. Assign the outcome to a variable. <br>
+&nbsp;
+
+// 6: <br>
+//  Assign a property in the request object named 'user' or 'req.user' the value of the decoded <br>
+//  token returned from the verify() method then call the next argument as a function meaning <br>
+//  the next '(req, res) => {...}' anonymous function will be executed. <br>
 &nbsp;
 
 ## Files to create, change or delete.
 
-// Change: ./config/default.json
-
-```javascript
-// CONFIG: default.json
-
-// 1: Create the secret string which can be any arbitrary value like a password.
-{
-    "mongoUri": "mongodb+srv://<USER-NAME>:********@<CLUSTER>/<APP-NAME>?retryWrites=true"
-    "jwtSecret": "****************************************"
-}
-```
-
+// Create: ./middleware/auth.js
+// 1: 
+//  mkdir middleware && touch middleware/auth.js
 &nbsp;
 
-// Change: ./routes/api/users.js
-
+// Change: 
+//  ./middleware/auth.js
 ```javascript
-// ROUTE: users.js
+// auth.js
 
 // 2:
-// import config to obtain the secret string used to sign the tokens.
-const config = require("config");
+const jwt = require("jsonwebtoken"),
+  config = require("config");
 
-// import npm jsonwebtoken package to use the methods it contains.
-const jwt = require("jsonwebtoken");
+// 3:
+module.exports = (req, res, next) => {
+  // NOTE:
+  //  This 'x-auth-token' is a key in the header object
+  //  that has a paired value of the json web token
+  //  assign the token a variable for further use.
+  //  Check if there is an even a token recieved from the header.
+  
+  // 4:
+  const token = req.header("x-auth-token");
 
-// file...
 
-// JsonWebToken = header.payload.signature encrypted to a-9.a-9.a-9
-/* 
-  Example: 
-  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. (Header - Default: {'alg': HS256, typ:'JWT'}) 
-  eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ. (Payload)
-  SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c (Signature)
-  */
-
-// Note: The 'user' variable now allready saved to the database has its id.
-// see ./routes/users.js or previous section about how that all takes place.
-
-// 3: 
-//  Creating the payload object to obtain the users mongoose id.
-const payload = {
-  user: {
-    id: user.id,
-  },
-};
-
-// 4:
-//  Sign the token the payload secret, set expiration and create a callback after signing.
-//  jwt.sign(<PAYLOAD>, <JWT-SECRET>, <OPTIONS>, <CALLBACK> )
-jwt.sign(
-  // The payload above
-  payload,
-  // Imported secret string
-  config.get("jwtSecret"),
-  // Set to expire in a day normally an hour which is 3600
-  { expiresIn: 360000 },
-
-  // Callback fuction to handle an error or return the token as the response
-  (err, token) => {
-    if (err) throw err;
-    res.json({ token });
+  // 5:
+  if (!token) {
+    return res.status(403).json({ message: "No token provided!" });
   }
-);
 
-// NOTE: 
-//  After this you can create a middleware that uses the jwt.verify() method to verify tokens
-//  in order to protect private endpoints. Will cover in next section.
+  // 6: 
+  try {
+    
+    const decodedToken = jwt.verify(token, config.get("jwtSecret"));
 
-// ...file
+    req.user = decodedToken;
+
+    next();
+
+  } catch (err) {
+    res.status(401).json({ message: "Token is not valid!" });
+  }
+};
 ```

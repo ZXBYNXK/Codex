@@ -1,5 +1,4 @@
 // ROUTE: users.js
-const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const gravatar = require("gravatar");
