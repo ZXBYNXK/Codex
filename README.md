@@ -1,48 +1,35 @@
-# 9 ) Login authentication.
+# 10 ) User profile model.
 
 ## Step by step summary.
 
-// 1: <br>
-// Import bcryptjs, jwt, config, "check()" & "validationResult()" from express-validator <br>
-//  Add the start of post route to the ./routes/api/auth.js file.  <br>   
+// 1:  <br>   
 &nbsp;
 
 // 2: <br>
-// Start the process of a post route.
 &nbsp;
 
-// 3: (express-validator) <br> 
-// Pass the request object to the verify test for any errors after validation. <br>  
-// And if any errors are present in the array then something is wrong<br>
+// 3: <br>
 &nbsp;
 
 // 4: <br> 
-// Deconstruct email & password from the body of the request. <br> 
 &nbsp;
 
-// 5: <br>
-// Search for a User document for a matching email which should be unique to the user .<br> 
+// 5: <br> 
 &nbsp;
 
 // 6: <br>
-// If there is no User document in the collection with that email <br>
 &nbsp;
 
 // 7: <br>
-// Do a password comparison with bcrypt.compare() as a final validation step. <br>
-// Validate the returned value from the compare method in a if statement <br>
 &nbsp;
 
-// 8: 
-//  Create the payload to be passed as an argument and can be decoded in other routes who use the auth middle ware. <br>
+// 8: <br>
 &nbsp;
 
-// 9: 
-//  Create & sign the token in the same way during user registration. <br>
+// 9: <br>
 &nbsp;
 
-// 10: 
-//  Catch any other errors that could occur (catch block). <br>
+// 10: <br>
 &nbsp;
 
 ## Files to create, change or delete.
