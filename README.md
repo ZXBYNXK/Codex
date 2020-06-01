@@ -1,10 +1,16 @@
+# 11) Setting up user profile routes.
+
+## Files to create, change or delete.
+Change: ./routes/api/profile.js
+```javascript
+
 // ROUTE: profile.js
 
 const express = require("express");
 const router = express.Router();
 
-// 2: Import auth middleware, also both the User and Profile models.
-const auth = require("../../middleware/auth");
+// 1: Import auth middleware, also both the User and Profile models.
+const auth = require("./auth");
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
 
@@ -12,9 +18,9 @@ const Profile = require("../../models/Profile");
 // @desc      Get and return a single user's profile privately.
 // @access    Private
 
-// 3: Change the endpoint to "/me" and add auth as middleware to this route.
+// 2: Change the endpoint to "/me" and add auth as middleware to this route.
 router.get("/me", auth, async (req, res) => {
-  // 4: In a try & catch block attempt to obtain & return the user's profile from the databse (try),
+  // 3: In a try & catch block attempt to obtain & return the user's profile from the databse (try),
   // and return two errors one if profile is'nt found or two a server error (catch block)
   try {
     // Attempt to find a user in the Profile collection referencing to the ObjectId with 'req.user.id'
@@ -38,3 +44,6 @@ router.get("/me", auth, async (req, res) => {
 });
 
 module.exports = router;
+
+```
+
