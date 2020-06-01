@@ -33,6 +33,8 @@
         }
 
         // 3: Create the rest of the fields
+        // NOTE: See ./models/Profile.js for to see the rest of the fields,
+        // too large of a file.
         bio: {
             type: String,
         },
@@ -53,6 +55,8 @@
         githubusername: {
             type: String,
         },
+        
+        // file...
 
     })
 
