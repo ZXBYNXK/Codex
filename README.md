@@ -2,8 +2,7 @@
 
 ## Step by step summary.
 
-// 1: Create 'Profile.js' file in the models directory, and import mongoose then initialize a <br>
-// Profile schema. <br>  
+// 1: Create 'Profile.js' file in the models directory, and import mongoose then initialize a Profile schema. <br>  
 &nbsp;
 
 // 2: In the Profile schema create a field that references an id from the User model <br>
