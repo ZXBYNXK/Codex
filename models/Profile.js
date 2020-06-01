@@ -124,7 +124,7 @@ const mongoose = require("mongoose"),
 
     // User's social media links.
     social: {
-      
+
       facebook: {
         type: String,
       },
@@ -145,4 +145,4 @@ const mongoose = require("mongoose"),
     },
   });
 
-module.exports = ProfileSchema;
+module.exports = mongoose.model('Profile', ProfileSchema);

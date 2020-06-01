@@ -1,64 +1,49 @@
-# 10 ) User profile model.
-
-## Step by step summary.
-
-// 1: Create 'Profile.js' file in the models directory, and import mongoose then initialize a Profile schema. <br>  
-&nbsp;
-
-// 2: In the Profile schema create a field that references an id from the User model <br>
-&nbsp;
-
-// 3: Create the rest of the fields I want the Profile to have<br>
-&nbsp;
+# 11) Setting up user profile routes.
 
 ## Files to create, change or delete.
-
-// Create: ./models/Profile.js <br>
-
+Change: ./routes/api/profile.js
 ```javascript
-    // MODEL: Profile.js
 
-    // 1: Import mongoose
-    const mongoose = require("mongoose");
+// ROUTE: profile.js
 
-    // 1: inititalize a Profile schema
-    const ProfileSchema = mongoose.Schema({
+const express = require("express");
+const router = express.Router();
 
-        // 2: Create a reference to the user model
-        user: {
-            type: String,
-            id: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
-        }
+// 1: Import auth middleware, also both the User and Profile models.
+const auth = require("./auth");
+const User = require("../../models/User");
+const Profile = require("../../models/Profile");
 
-        // 3: Create the rest of the fields
-        // NOTE: See ./models/Profile.js for to see the rest of the fields,
-        // too large of a file.
-        bio: {
-            type: String,
-        },
+// @route     GET 'api/profile/me'
+// @desc      Get and return a single user's profile privately.
+// @access    Private
 
-        // Newbie, Junior, Senior
-        status: {
-            type: "String",
-            required: true,
-        },
+// 2: Change the endpoint to "/me" and add auth as middleware to this route.
+router.get("/me", auth, async (req, res) => {
+  // 3: In a try & catch block attempt to obtain & return the user's profile from the databse (try),
+  // and return two errors one if profile is'nt found or two a server error (catch block)
+  try {
+    // Attempt to find a user in the Profile collection referencing to the ObjectId with 'req.user.id'
+    const profile = await Profile.findOne({
+      user: req.user.id,
+    }).populate("user", ["name", "avatar"]);
 
-        // Javascript, Python, Java, Angular, Kubernetes...
-        skills: {
-            type: [String],
-            required: true,
-        },
+    // If user profile is not found just return a bad request, dont need to be descriptive to the public.
+    if (!profile) {
+      return res.status(401).json({ message: "Bad Request!" });
+    }
 
+    // If code execution makes it here that means things went well.
+    // So return the profile
+    res.json({ profile });
+  } catch (err) {
+    // Handle server error
+    console.error(err.message);
+    res.status(500).send("Server Error!");
+  }
+});
 
-        githubusername: {
-            type: String,
-        },
-        
-        // file...
-
-    })
-
-
+module.exports = router;
 
 ```
+
